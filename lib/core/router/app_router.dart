@@ -1,6 +1,7 @@
 import 'package:bloc_clean_architecture/core/error/exceptions.dart';
 import 'package:bloc_clean_architecture/presentation/views/authentication/signin_view.dart';
 import 'package:bloc_clean_architecture/presentation/views/authentication/signup_view.dart';
+import 'package:bloc_clean_architecture/presentation/views/main/main_view.dart';
 import 'package:bloc_clean_architecture/presentation/views/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -9,6 +10,7 @@ class AppRouter {
   static const String root = '/';
   static const String signin = '/signin';
   static const String signup = '/signup';
+  static const String main = '/main';
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case root:
@@ -25,6 +27,11 @@ class AppRouter {
         return PageTransition(
           child: const SignUpView(),
           type: PageTransitionType.leftToRight,
+        );
+      case main:
+        return PageTransition(
+          child: const MainView(),
+          type: PageTransitionType.rightToLeft,
         );
       default:
         throw RouteException('Route Not Found!');

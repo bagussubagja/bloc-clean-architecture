@@ -1,4 +1,5 @@
 import 'package:bloc_clean_architecture/core/constant/strings.dart';
+import 'package:bloc_clean_architecture/core/router/app_router.dart';
 import 'package:bloc_clean_architecture/core/theme/app_theme.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/signin/signin_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/auth_nav_text.dart';
@@ -87,7 +88,9 @@ class _SigninViewState extends State<SigninView> {
               authNavText(context, true),
               verticalSpacing(12),
               customButton(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, AppRouter.main);
+                },
                 text: 'Sign In',
               )
             ],
