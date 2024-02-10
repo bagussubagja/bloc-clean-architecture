@@ -7,6 +7,13 @@ class AppTheme {
     fontWeight: FontWeight.w800,
     color: AppColor.blackColor100,
   );
+
+  static const header2 = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w800,
+    color: AppColor.blackColor100,
+  );
+
   static const paragraph1 = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w400,

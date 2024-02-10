@@ -1,5 +1,7 @@
 import 'package:bloc_clean_architecture/core/router/app_router.dart';
 import 'package:bloc_clean_architecture/core/services/services_locator.dart';
+import 'package:bloc_clean_architecture/presentation/blocs/main/cart/cart_bloc.dart';
+import 'package:bloc_clean_architecture/presentation/blocs/main/home/home_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/main_cubit.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/signin/signin_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/signup/signup_bloc.dart';
@@ -29,7 +31,15 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => SignupBloc(),
         ),
-        BlocProvider(create: (context) => MainCubit(),)
+        BlocProvider(
+          create: (context) => MainCubit(),
+        ),
+        BlocProvider(
+          create: (context) => HomeBloc(),
+        ),
+        BlocProvider(
+          create: (context) => CartBloc(),
+        )
       ],
       child: MaterialApp(
         title: 'BLoC Clean Architecture',
