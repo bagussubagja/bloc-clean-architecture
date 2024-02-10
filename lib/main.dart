@@ -1,5 +1,7 @@
 import 'package:bloc_clean_architecture/core/router/app_router.dart';
 import 'package:bloc_clean_architecture/core/services/services_locator.dart';
+import 'package:bloc_clean_architecture/presentation/blocs/signin/signin_bloc.dart';
+import 'package:bloc_clean_architecture/presentation/blocs/signup/signup_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/splash_screen/splash_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +22,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => SplashScreenCubit(),
         ),
+        BlocProvider(
+          create: (context) => SigninBloc(),
+        ),
+        BlocProvider(
+          create: (context) => SignupBloc(),
+        )
       ],
       child: MaterialApp(
         title: 'BLoC Clean Architecture',

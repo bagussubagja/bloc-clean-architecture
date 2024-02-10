@@ -1,6 +1,6 @@
 import 'package:bloc_clean_architecture/core/constant/strings.dart';
 import 'package:bloc_clean_architecture/core/theme/app_theme.dart';
-import 'package:bloc_clean_architecture/presentation/blocs/signin/signin_bloc.dart';
+import 'package:bloc_clean_architecture/presentation/blocs/signup/signup_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/auth_nav_text.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/custom_button.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/custom_spacing.dart';
@@ -8,36 +8,25 @@ import 'package:bloc_clean_architecture/presentation/widgets/custom_textfield.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SigninView extends StatefulWidget {
-  const SigninView({super.key});
+class SignUpView extends StatefulWidget {
+  const SignUpView({super.key});
 
   @override
-  State<SigninView> createState() => _SigninViewState();
+  State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _SigninViewState extends State<SigninView> {
+class _SignUpViewState extends State<SignUpView> {
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<SigninBloc, SigninState>(
+      body: BlocConsumer<SignupBloc, SignupState>(
         builder: (context, state) {
-          if (state is SigninInitial) {
-            return _buildBody(emailController, passwordController);
+          if (state is SignupInitial) {
+            return _buildBody(
+                emailController, passwordController, nameController);
           }
           return const SizedBox.shrink();
         },
@@ -49,6 +38,7 @@ class _SigninViewState extends State<SigninView> {
   Widget _buildBody(
     TextEditingController emailController,
     passwordController,
+    nameController,
   ) {
     return SafeArea(
       child: Center(
@@ -61,12 +51,20 @@ class _SigninViewState extends State<SigninView> {
               const Align(
                 alignment: Alignment.center,
                 child: Text(
-                  '${StringConstant.appName} - SignIn',
+                  '${StringConstant.appName} - SignUp',
                   style: AppTheme.header1,
                   textAlign: TextAlign.center,
                 ),
               ),
               verticalSpacing(16),
+              customTextField(
+                controller: nameController,
+                hintText: 'who is your name?',
+                labelText: 'Full Name',
+                keyboardType: TextInputType.emailAddress,
+                isPassword: false,
+                isReadOnly: false,
+              ),
               customTextField(
                 controller: emailController,
                 hintText: 'add your email here...',
@@ -84,11 +82,11 @@ class _SigninViewState extends State<SigninView> {
                 isReadOnly: false,
               ),
               verticalSpacing(12),
-              authNavText(context, true),
+              authNavText(context, false),
               verticalSpacing(12),
               customButton(
                 onTap: () {},
-                text: 'Sign In',
+                text: 'Sign Up',
               )
             ],
           ),

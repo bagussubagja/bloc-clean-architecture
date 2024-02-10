@@ -10,7 +10,7 @@ class SplashScreenCubit extends Cubit<SplashScreenState> {
 
   void moveToScreen(BuildContext context) {
     Future.delayed(const Duration(seconds: 2)).then(
-      (_) => Navigator.pushNamed(
+      (_) => Navigator.pushReplacementNamed(
         context,
         AppRouter.signin,
       ),
