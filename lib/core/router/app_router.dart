@@ -1,6 +1,7 @@
 import 'package:bloc_clean_architecture/core/error/exceptions.dart';
 import 'package:bloc_clean_architecture/presentation/views/authentication/signin_view.dart';
 import 'package:bloc_clean_architecture/presentation/views/authentication/signup_view.dart';
+import 'package:bloc_clean_architecture/presentation/views/detail_product/detail_product_view.dart';
 import 'package:bloc_clean_architecture/presentation/views/main/main_view.dart';
 import 'package:bloc_clean_architecture/presentation/views/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class AppRouter {
   static const String signin = '/signin';
   static const String signup = '/signup';
   static const String main = '/main';
+  static const String detailProduct = '/detail-product';
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case root:
@@ -31,6 +33,11 @@ class AppRouter {
       case main:
         return PageTransition(
           child: const MainView(),
+          type: PageTransitionType.rightToLeft,
+        );
+      case detailProduct:
+        return PageTransition(
+          child: const DetailProductView(),
           type: PageTransitionType.rightToLeft,
         );
       default:

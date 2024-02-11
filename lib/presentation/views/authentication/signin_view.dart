@@ -1,6 +1,7 @@
 import 'package:bloc_clean_architecture/core/constant/strings.dart';
 import 'package:bloc_clean_architecture/core/router/app_router.dart';
 import 'package:bloc_clean_architecture/core/theme/app_theme.dart';
+import 'package:bloc_clean_architecture/data/models/user/auth_signin_response_model.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/signin/signin_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/auth_nav_text.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/custom_button.dart';
@@ -17,8 +18,9 @@ class SigninView extends StatefulWidget {
 }
 
 class _SigninViewState extends State<SigninView> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final emailController = TextEditingController(text: 'bagus@email.com');
+  final passwordController = TextEditingController(text: '1234');
+
 
   @override
   void initState() {
@@ -35,21 +37,24 @@ class _SigninViewState extends State<SigninView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<SigninBloc, SigninState>(
-        builder: (context, state) {
-          if (state is SigninInitial) {
-            return _buildBody(emailController, passwordController);
+      body: BlocListener<SigninBloc, SigninState>(
+        listener: (context, state) {
+          if (state is SignInSuccessState) {
+            Navigator.pushReplacementNamed(context, AppRouter.main);
           }
-          return const SizedBox.shrink();
+          if (state is SignInFailedState) {
+            const snackBar = SnackBar(content: Text('Failed To Login'));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
         },
-        listener: (context, state) {},
+        child: _buildBody(emailController, passwordController),
       ),
     );
   }
 
   Widget _buildBody(
     TextEditingController emailController,
-    passwordController,
+    TextEditingController passwordController,
   ) {
     return SafeArea(
       child: Center(
@@ -89,7 +94,11 @@ class _SigninViewState extends State<SigninView> {
               verticalSpacing(12),
               customButton(
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, AppRouter.main);
+                  var params = SignInParams(
+                    email: emailController.text,
+                    password: passwordController.text,
+                  );
+                  context.read<SigninBloc>().add(SignInUser(params));
                 },
                 text: 'Sign In',
               )

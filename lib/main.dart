@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           create: (context) => SplashScreenCubit(),
         ),
         BlocProvider(
-          create: (context) => SigninBloc(),
+          create: (context) => SigninBloc(sl()),
         ),
         BlocProvider(
           create: (context) => SignupBloc(),
