@@ -19,6 +19,7 @@ abstract class UserLocalDataSource {
 }
 
 const cachedToken = 'TOKEN';
+const cachedRefreshToken = 'REFRESHTOKEN';
 const cachedUser = 'USER';
 
 class UserLocalDataSourceImpl implements UserLocalDataSource {

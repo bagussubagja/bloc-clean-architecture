@@ -37,7 +37,8 @@ class AppRouter {
         );
       case detailProduct:
         return PageTransition(
-          child: const DetailProductView(),
+          child:
+              DetailProductView(productId: routeSettings.arguments as int),
           type: PageTransitionType.rightToLeft,
         );
       default:

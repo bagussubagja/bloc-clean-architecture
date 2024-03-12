@@ -11,4 +11,10 @@ abstract class SplashScreenActionState extends SplashScreenState {}
 
 class SplashScreenInitial extends SplashScreenState {}
 
+class SplashScreenMoveToMainPageState extends SplashScreenActionState {}
+
+class SplashScreenMoveToLoginPage extends SplashScreenActionState {}
+
+class SplashScreenLoadingState extends SplashScreenState {}
+
 class SplashScreenOutState extends SplashScreenActionState {}

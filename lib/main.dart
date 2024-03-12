@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => SplashScreenCubit(),
+          create: (context) => SplashScreenCubit(sl(), sl()),
         ),
         BlocProvider(
           create: (context) => SigninBloc(sl()),
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           create: (context) => MainCubit(),
         ),
         BlocProvider(
-          create: (context) => HomeBloc(sl(), sl()),
+          create: (context) => HomeBloc(sl(), sl(), sl(), sl()),
         ),
         BlocProvider(
           create: (context) => CartBloc(),

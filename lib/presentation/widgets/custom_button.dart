@@ -19,7 +19,9 @@ Widget customButton(
         borderRadius: BorderRadius.circular(12),
       ),
       child: isLoading
-          ? const CupertinoActivityIndicator()
+          ? const CupertinoActivityIndicator(
+              color: Colors.white,
+            )
           : Text(
               text,
               style: AppTheme.paragraph2.copyWith(color: AppColor.whiteColor),

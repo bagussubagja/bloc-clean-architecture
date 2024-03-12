@@ -4,6 +4,7 @@ import 'package:bloc_clean_architecture/data/data_source/local/user_local_data_s
 import 'package:bloc_clean_architecture/data/data_source/remote/user_remote_data_source.dart';
 import 'package:bloc_clean_architecture/data/models/user/auth_signin_response_model.dart';
 import 'package:bloc_clean_architecture/data/models/user/auth_signup_response_model.dart';
+import 'package:bloc_clean_architecture/domain/entities/user/user_profile.dart';
 import 'package:bloc_clean_architecture/domain/entities/user/user_signin.dart';
 import 'package:bloc_clean_architecture/domain/repositories/user_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -21,14 +22,10 @@ class UserRepositoryImpl implements UserRepository {
     required this.networkInfo,
   });
   @override
-  Future<Either<Failure, AuthSignInResponseModel>> signIn(
-      SignInParams params) async {
-    try {
-      final user = await userRemoteDataSource.signIn(params);
-      return Right(user);
-    } catch (e) {
-      return Left(ExceptionFailure());
-    }
+  Future<Either<Failure, UserSignIn>> signIn(SignInParams params) async {
+    return await _authenticate(() {
+      return userRemoteDataSource.signIn(params);
+    });
   }
 
   @override
@@ -48,7 +45,7 @@ class UserRepositoryImpl implements UserRepository {
     if (await networkInfo.isConnected) {
       try {
         final remoteResponse = await getDataSource();
-        localDataSource.saveToken(remoteResponse.refreshToken);
+        localDataSource.saveToken(remoteResponse.accessToken);
         localDataSource.saveUser(remoteResponse);
         return Right(remoteResponse);
       } on Failure catch (failure) {
@@ -56,6 +53,16 @@ class UserRepositoryImpl implements UserRepository {
       }
     } else {
       return Left(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserProfile>> userProfile(String token) async {
+    try {
+      final result = await userRemoteDataSource.userProfile(token);
+      return Right(result);
+    } catch (e) {
+      return Left(ExceptionFailure());
     }
   }
 }

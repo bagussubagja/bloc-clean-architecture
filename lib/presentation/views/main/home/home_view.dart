@@ -8,6 +8,7 @@ import 'package:bloc_clean_architecture/presentation/widgets/custom_spacing.dart
 import 'package:bloc_clean_architecture/presentation/widgets/loading_widget.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/product_item_card.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,11 +37,12 @@ class _HomeViewState extends State<HomeView> {
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(12),
                 children: [
-                  _headerSection(),
+                  _headerSection(state.user.name!, state.user.avatar!),
                   verticalSpacing(36),
                   _categorySection(state.categories),
                   verticalSpacing(36),
-                  _productListSection(products: state.products!),
+                  _productListSection(products: state.products!, ),
+                  verticalSpacing(75),
                 ],
               ),
             );
@@ -48,6 +50,11 @@ class _HomeViewState extends State<HomeView> {
           if (state is HomeFailedFetchData) {
             return Center(
               child: Text(state.failure.toString()),
+            );
+          }
+          if (state is HomeLoadingFetchData) {
+            return const Center(
+              child: CupertinoActivityIndicator(),
             );
           }
           return const SizedBox.shrink();
@@ -68,7 +75,7 @@ class _HomeViewState extends State<HomeView> {
           crossAxisSpacing: 20,
           mainAxisSpacing: 20),
       itemBuilder: (context, index) =>
-          productItemCard(context, products[index]),
+          productItemCard(context, products[index], products[index].id!),
     );
   }
 
@@ -100,34 +107,36 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _headerSection() {
+  Widget _headerSection(String name, String profileUrl) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Welcome,',
               style: AppTheme.header1,
             ),
             Text(
-              'Bagus Subagja',
+              name,
               style: AppTheme.paragraph2,
             )
           ],
         ),
         CachedNetworkImage(
-          imageUrl: StringConstant.placeholderAvatar,
+          imageUrl: profileUrl,
           placeholder: (context, url) => loadingWidget(),
           imageBuilder: (context, imageProvider) {
-            return Container(
-              height: 65,
-              width: 65,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: imageProvider,
+            return ClipRRect(
+              child: Container(
+                height: 65,
+                width: 65,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: imageProvider,
+                  ),
                 ),
               ),
             );

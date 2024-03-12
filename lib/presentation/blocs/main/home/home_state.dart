@@ -14,9 +14,13 @@ class HomeLoadingFetchData extends HomeState {}
 class HomeSuccessFetchData extends HomeState {
   final List<Products>? products;
   final List<Categories> categories;
+  final UserProfile user;
 
-  const HomeSuccessFetchData(
-      {required this.products, required this.categories});
+  const HomeSuccessFetchData({
+    required this.products,
+    required this.categories,
+    required this.user,
+  });
 }
 
 class HomeFailedFetchData extends HomeState {
