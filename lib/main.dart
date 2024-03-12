@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           create: (context) => MainCubit(),
         ),
         BlocProvider(
-          create: (context) => HomeBloc(),
+          create: (context) => HomeBloc(sl(), sl()),
         ),
         BlocProvider(
           create: (context) => CartBloc(),

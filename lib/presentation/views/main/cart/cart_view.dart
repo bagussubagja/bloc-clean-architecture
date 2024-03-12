@@ -27,7 +27,7 @@ class _CartViewState extends State<CartView> {
     return SafeArea(
       child: ListView(
         padding: const EdgeInsets.all(12),
-        children: [
+        children: const [
           Text(
             'Cart',
             style: AppTheme.header1,

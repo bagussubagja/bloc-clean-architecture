@@ -1,12 +1,13 @@
 import 'package:bloc_clean_architecture/core/constant/colors.dart';
-import 'package:bloc_clean_architecture/core/constant/strings.dart';
 import 'package:bloc_clean_architecture/core/router/app_router.dart';
 import 'package:bloc_clean_architecture/core/theme/app_theme.dart';
+import 'package:bloc_clean_architecture/domain/entities/products/products.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/custom_spacing.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget productItemCard(BuildContext context) {
+Widget productItemCard(BuildContext context, Products products) {
   return GestureDetector(
     onTap: () {
       Navigator.pushNamed(context, AppRouter.detailProduct);
@@ -31,13 +32,27 @@ Widget productItemCard(BuildContext context) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CachedNetworkImage(
-            imageUrl: StringConstant.placeholderProduct,
+            imageUrl: products.images![0],
+            placeholder: (context, url) => const Center(
+              child: CupertinoActivityIndicator(),
+            ),
+            errorWidget: (context, url, error) => const Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error),
+                Text('Image Not Found'),
+              ],
+            ),
             imageBuilder: (context, imageProvider) {
               return Container(
-                height: 100,
+                height: 120,
                 alignment: Alignment.center,
                 width: double.infinity,
                 decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12)),
                   image: DecorationImage(
                     image: imageProvider,
                     fit: BoxFit.fill,
@@ -46,13 +61,14 @@ Widget productItemCard(BuildContext context) {
               );
             },
           ),
+          const Spacer(),
           Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'name_of_product',
+                  products.title!,
                   style: AppTheme.paragraph2,
                 ),
                 verticalSpacing(12),
@@ -60,10 +76,10 @@ Widget productItemCard(BuildContext context) {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$10',
+                      '\$${products.price}',
                       style: AppTheme.paragraph1,
                     ),
-                    Icon(
+                    const Icon(
                       Icons.shopping_cart_checkout,
                     )
                   ],

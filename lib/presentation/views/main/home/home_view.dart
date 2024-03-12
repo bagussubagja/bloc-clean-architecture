@@ -1,5 +1,7 @@
 import 'package:bloc_clean_architecture/core/constant/strings.dart';
 import 'package:bloc_clean_architecture/core/theme/app_theme.dart';
+import 'package:bloc_clean_architecture/domain/entities/category/categories.dart';
+import 'package:bloc_clean_architecture/domain/entities/products/products.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/home/home_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/category_tile.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/custom_spacing.dart';
@@ -17,64 +19,61 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  /// TODO : Delete Soon
-  final List<String> categories = [
-    'category1',
-    'category2',
-    'category3',
-    'category4',
-    'category5',
-  ];
+  @override
+  void initState() {
+    context.read<HomeBloc>().add(HomeFetchDataEvent());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<HomeBloc, HomeState>(
         builder: (context, state) {
-          // if (state is HomeSuccessFetchData) {
-          //   return _buildBody();
-          // }
-          // return const SizedBox.shrink();
-          return _buildBody();
+          if (state is HomeSuccessFetchData) {
+            return SafeArea(
+              child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(12),
+                children: [
+                  _headerSection(),
+                  verticalSpacing(36),
+                  _categorySection(state.categories),
+                  verticalSpacing(36),
+                  _productListSection(products: state.products!),
+                ],
+              ),
+            );
+          }
+          if (state is HomeFailedFetchData) {
+            return Center(
+              child: Text(state.failure.toString()),
+            );
+          }
+          return const SizedBox.shrink();
         },
         listener: (context, state) {},
       ),
     );
   }
 
-  Widget _buildBody() {
-    return SafeArea(
-      child: ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(12),
-        children: [
-          _headerSection(),
-          verticalSpacing(36),
-          _categorySection(categories),
-          verticalSpacing(36),
-          _productListSection(),
-        ],
-      ),
-    );
-  }
-
-  Widget _productListSection() {
+  Widget _productListSection({required List<Products> products}) {
     return GridView.builder(
       shrinkWrap: true,
-      itemCount: 20,
+      itemCount: products.length,
       primary: false,
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
-          childAspectRatio: 1 / 1,
+          childAspectRatio: 3 / 4,
           crossAxisSpacing: 20,
           mainAxisSpacing: 20),
-      itemBuilder: (context, index) => productItemCard(
-        context,
-      ),
+      itemBuilder: (context, index) =>
+          productItemCard(context, products[index]),
     );
   }
 
   Widget _categorySection(
-    List<String> category,
+    List<Categories> category,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +92,7 @@ class _HomeViewState extends State<HomeView> {
             scrollDirection: Axis.horizontal,
             separatorBuilder: (context, index) => horizontalSpacing(12),
             itemBuilder: (context, index) => categoryTile(
-              category[index],
+              category[index].name!,
             ),
           ),
         ),

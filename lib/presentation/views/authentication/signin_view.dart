@@ -20,8 +20,7 @@ class SigninView extends StatefulWidget {
 class _SigninViewState extends State<SigninView> {
   final emailController = TextEditingController(text: 'bagus@email.com');
   final passwordController = TextEditingController(text: '1234');
-
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -39,12 +38,20 @@ class _SigninViewState extends State<SigninView> {
     return Scaffold(
       body: BlocListener<SigninBloc, SigninState>(
         listener: (context, state) {
+          if (state is SignInLoadingState) {
+            setState(() {
+              isLoading = true;
+            });
+          }
           if (state is SignInSuccessState) {
             Navigator.pushReplacementNamed(context, AppRouter.main);
           }
           if (state is SignInFailedState) {
             const snackBar = SnackBar(content: Text('Failed To Login'));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            setState(() {
+              isLoading = false;
+            });
           }
         },
         child: _buildBody(emailController, passwordController),
@@ -93,6 +100,7 @@ class _SigninViewState extends State<SigninView> {
               authNavText(context, true),
               verticalSpacing(12),
               customButton(
+                isLoading: isLoading,
                 onTap: () {
                   var params = SignInParams(
                     email: emailController.text,

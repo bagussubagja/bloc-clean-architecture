@@ -19,6 +19,7 @@ class _SignUpViewState extends State<SignUpView> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,6 +86,7 @@ class _SignUpViewState extends State<SignUpView> {
               authNavText(context, false),
               verticalSpacing(12),
               customButton(
+                isLoading: isLoading,
                 onTap: () {},
                 text: 'Sign Up',
               )

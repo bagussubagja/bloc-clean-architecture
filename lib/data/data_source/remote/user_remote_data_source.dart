@@ -23,7 +23,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
           'Content-Type': 'application/json',
         },
         body: signInParamsToJson(params));
-    print("response.body ${response.body}");
     if (response.statusCode == 201) {
       return authSignInResponseModelFromJson(response.body);
     } else if (response.statusCode == 400 || response.statusCode == 401) {
