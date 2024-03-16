@@ -6,6 +6,7 @@ import 'package:bloc_clean_architecture/domain/entities/products/products.dart';
 import 'package:bloc_clean_architecture/domain/entities/user/user_profile.dart';
 import 'package:bloc_clean_architecture/domain/usecases/category/get_category_usecase.dart';
 import 'package:bloc_clean_architecture/domain/usecases/products/get_product_usecase.dart';
+import 'package:bloc_clean_architecture/domain/usecases/products/get_products_by_category.dart';
 import 'package:bloc_clean_architecture/domain/usecases/user/get_profile_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -17,11 +18,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetProductUseCase getProductUseCase;
   final GetCategoryUseCase getCategoryUseCase;
   final GetProfileUserUseCase getProfileUserUseCase;
+  final GetProductsByCategory getProductsByCategory;
   final FlutterSecureStorage secureStorage;
-  HomeBloc(this.getProductUseCase, this.getCategoryUseCase,
-      this.getProfileUserUseCase, this.secureStorage)
+
+  HomeBloc(
+      this.getProductUseCase,
+      this.getCategoryUseCase,
+      this.getProfileUserUseCase,
+      this.secureStorage,
+      this.getProductsByCategory)
       : super(HomeInitial()) {
     on<HomeFetchDataEvent>(onHomeFetchDataEvent);
+    on<HomeFetchProductDataByCategoryEvent>(
+        onHomeFetchProductDataByCategoryEvent);
   }
 
   void onHomeFetchDataEvent(
@@ -46,6 +55,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       });
     } catch (e) {
       emit(HomeFailedFetchData(failure: ExceptionFailure()));
+    }
+  }
+
+  void onHomeFetchProductDataByCategoryEvent(
+      HomeFetchProductDataByCategoryEvent event,
+      Emitter<HomeState> emit) async {
+    try {
+      emit(HomeFetchProductByCategoryLoadingState());
+      final productCategoryResult = await getProductsByCategory(event.id);
+      productCategoryResult.fold(
+        (l) => emit(HomeFetchProductByCategoryFailedState(l)),
+        (r) => emit(
+          HomeFetchProductByCategorySuccessState(r),
+        ),
+      );
+    } catch (e) {
+      emit(HomeFetchProductByCategoryFailedState(ExceptionFailure()));
     }
   }
 }

@@ -49,6 +49,7 @@ class UserProfileModel extends UserProfile {
             : DateTime.parse(json["updatedAt"]),
       );
 
+  @override
   Map<String, dynamic> toJson() => {
         "id": id,
         "email": email,

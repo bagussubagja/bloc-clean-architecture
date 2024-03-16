@@ -40,6 +40,7 @@ class CategoriesModel extends Categories {
             : DateTime.parse(json["updatedAt"]),
       );
 
+  @override
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,

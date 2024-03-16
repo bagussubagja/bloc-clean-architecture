@@ -2,6 +2,7 @@ import 'package:bloc_clean_architecture/core/error/failures.dart';
 import 'package:bloc_clean_architecture/data/data_source/remote/product_remote_data_source.dart';
 import 'package:bloc_clean_architecture/data/models/product/products_model.dart';
 import 'package:bloc_clean_architecture/domain/entities/products/detail_product.dart';
+import 'package:bloc_clean_architecture/domain/entities/products/products.dart';
 
 import 'package:dartz/dartz.dart';
 
@@ -26,6 +27,16 @@ class ProductRepositoryImpl implements ProductRepository {
     try {
       final detailProduct = await productRemoteDataSource.getDetailProduct(id);
       return Right(detailProduct);
+    } catch (e) {
+      return Left(ExceptionFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Products>>> getProductByCategory(int id) async {
+    try {
+      final productByCategory = await productRemoteDataSource.getProductsByCategory(id);
+      return Right(productByCategory);
     } catch (e) {
       return Left(ExceptionFailure());
     }

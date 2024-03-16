@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_clean_architecture/core/error/failures.dart';

@@ -1,4 +1,3 @@
-import 'package:bloc_clean_architecture/core/constant/strings.dart';
 import 'package:bloc_clean_architecture/core/theme/app_theme.dart';
 import 'package:bloc_clean_architecture/domain/entities/category/categories.dart';
 import 'package:bloc_clean_architecture/domain/entities/products/products.dart';
@@ -20,6 +19,10 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  List<Products> products = [];
+  int selectedId = 1;
+  bool isLoading = false;
+
   @override
   void initState() {
     context.read<HomeBloc>().add(HomeFetchDataEvent());
@@ -30,6 +33,8 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<HomeBloc, HomeState>(
+        buildWhen: (previous, current) => current is! HomeAfterState,
+        listenWhen: (previous, current) => current is HomeAfterState,
         builder: (context, state) {
           if (state is HomeSuccessFetchData) {
             return SafeArea(
@@ -41,7 +46,15 @@ class _HomeViewState extends State<HomeView> {
                   verticalSpacing(36),
                   _categorySection(state.categories),
                   verticalSpacing(36),
-                  _productListSection(products: state.products!, ),
+                  Visibility(
+                    replacement: const Center(
+                      child: CupertinoActivityIndicator(),
+                    ),
+                    visible: !isLoading,
+                    child: _productListSection(
+                      products: products.isEmpty ? state.products! : products,
+                    ),
+                  ),
                   verticalSpacing(75),
                 ],
               ),
@@ -59,7 +72,19 @@ class _HomeViewState extends State<HomeView> {
           }
           return const SizedBox.shrink();
         },
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is HomeFetchProductByCategorySuccessState) {
+            setState(() {
+              isLoading = false;
+              products = state.products!;
+            });
+          }
+          if (state is HomeFetchProductByCategoryLoadingState) {
+            setState(() {
+              isLoading = true;
+            });
+          }
+        },
       ),
     );
   }
@@ -74,8 +99,11 @@ class _HomeViewState extends State<HomeView> {
           childAspectRatio: 3 / 4,
           crossAxisSpacing: 20,
           mainAxisSpacing: 20),
-      itemBuilder: (context, index) =>
-          productItemCard(context, products[index], products[index].id!),
+      itemBuilder: (context, index) => productItemCard(
+        context,
+        products[index],
+        products[index].id!,
+      ),
     );
   }
 
@@ -98,8 +126,16 @@ class _HomeViewState extends State<HomeView> {
             itemCount: category.length,
             scrollDirection: Axis.horizontal,
             separatorBuilder: (context, index) => horizontalSpacing(12),
-            itemBuilder: (context, index) => categoryTile(
-              category[index].name!,
+            itemBuilder: (context, index) => InkWell(
+              onTap: () {
+                context.read<HomeBloc>().add(
+                    HomeFetchProductDataByCategoryEvent(category[index].id!));
+                setState(() {
+                  selectedId = category[index].id!;
+                });
+              },
+              child: categoryTile(
+                  category[index].name!, category[index].id!, selectedId),
             ),
           ),
         ),

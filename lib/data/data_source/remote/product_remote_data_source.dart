@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 abstract class ProductRemoteDataSource {
   Future<List<ProductsModel>> getProducts();
   Future<DetailProductModel> getDetailProduct(int id);
+  Future<List<ProductsModel>> getProductsByCategory(int id);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -32,5 +33,15 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     } else {
       throw ServerException();
     }
+  }
+
+  @override
+  Future<List<ProductsModel>> getProductsByCategory(int id) async {
+   final response = await client.get(Uri.parse('https://api.escuelajs.co/api/v1/categories/$id/products'));
+   if (response.statusCode == 200) {
+     return productsModelFromJson(response.body);
+   } else {
+     throw ServerException();
+   }
   }
 }

@@ -12,6 +12,7 @@ import 'package:bloc_clean_architecture/domain/repositories/user_repository.dart
 import 'package:bloc_clean_architecture/domain/usecases/category/get_category_usecase.dart';
 import 'package:bloc_clean_architecture/domain/usecases/products/get_detail_product_usecase.dart';
 import 'package:bloc_clean_architecture/domain/usecases/products/get_product_usecase.dart';
+import 'package:bloc_clean_architecture/domain/usecases/products/get_products_by_category.dart';
 import 'package:bloc_clean_architecture/domain/usecases/user/get_profile_usecase.dart';
 import 'package:bloc_clean_architecture/domain/usecases/user/sign_in_usecase.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/detail_product/detail_product_bloc.dart';
@@ -35,7 +36,7 @@ Future<void> initServiceLocator() async {
   sl.registerFactory(() => SigninBloc(sl()));
   sl.registerFactory(() => SignupBloc());
   sl.registerFactory(() => MainCubit());
-  sl.registerFactory(() => HomeBloc(sl(), sl(), sl(), sl()));
+  sl.registerFactory(() => HomeBloc(sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory(() => CartBloc());
   sl.registerFactory(() => DetailProductBloc(sl()));
 
@@ -47,6 +48,7 @@ Future<void> initServiceLocator() async {
   sl.registerLazySingleton(() => GetCategoryUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetProfileUserUseCase(sl()));
   sl.registerLazySingleton(() => GetDetailProductUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetProductsByCategory(sl()));
 
   // Repository
   sl.registerLazySingleton<UserRepository>(

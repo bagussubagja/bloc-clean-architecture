@@ -53,6 +53,7 @@ class DetailProductModel extends DetailProduct {
             : CategoryDetailProduct.fromJson(json["category"]),
       );
 
+  @override
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,

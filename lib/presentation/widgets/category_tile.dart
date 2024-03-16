@@ -4,17 +4,23 @@ import 'package:flutter/material.dart';
 
 Widget categoryTile(
   String category,
+  int id,
+  int selectedId,
 ) {
   return Container(
     padding: const EdgeInsets.all(12),
     decoration: BoxDecoration(
-      color: AppColor.greenLightMossColor,
+      border: Border.all(color: AppColor.greenLightMossColor),
+      color:
+          selectedId == id ? AppColor.greenLightMossColor : AppColor.whiteColor,
       borderRadius: BorderRadius.circular(12),
     ),
     child: Text(
       category,
       style: AppTheme.paragraph2.copyWith(
-        color: AppColor.whiteColor,
+        color: selectedId == id
+            ? AppColor.whiteColor
+            : AppColor.greenLightMossColor,
       ),
     ),
   );

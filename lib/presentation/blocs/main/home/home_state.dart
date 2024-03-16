@@ -7,6 +7,8 @@ abstract class HomeState extends Equatable {
   List<Object> get props => [];
 }
 
+abstract class HomeAfterState extends HomeState {}
+
 class HomeInitial extends HomeState {}
 
 class HomeLoadingFetchData extends HomeState {}
@@ -27,4 +29,19 @@ class HomeFailedFetchData extends HomeState {
   final Failure failure;
 
   const HomeFailedFetchData({required this.failure});
+}
+
+class HomeFetchProductByCategoryLoadingState extends HomeAfterState {}
+
+class HomeFetchProductByCategorySuccessState extends HomeAfterState {
+  final List<Products>? products;
+
+  HomeFetchProductByCategorySuccessState(this.products);
+
+}
+
+class HomeFetchProductByCategoryFailedState extends HomeAfterState {
+  final Failure failure;
+
+  HomeFetchProductByCategoryFailedState(this.failure);
 }
