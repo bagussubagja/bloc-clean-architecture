@@ -25,6 +25,7 @@ const cachedUser = 'USER';
 class UserLocalDataSourceImpl implements UserLocalDataSource {
   final FlutterSecureStorage secureStorage;
   final SharedPreferences sharedPreferences;
+
   UserLocalDataSourceImpl(
       {required this.sharedPreferences, required this.secureStorage});
 
@@ -74,7 +75,8 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
   @override
   Future<void> clearCache() async {
     await secureStorage.deleteAll();
-    // await sharedPreferences.remove(cachedCart);
     await sharedPreferences.remove(cachedUser);
+    await sharedPreferences.remove(cachedRefreshToken);
+    await sharedPreferences.remove(cachedToken);
   }
 }

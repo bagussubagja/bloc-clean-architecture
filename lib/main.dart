@@ -5,6 +5,7 @@ import 'package:bloc_clean_architecture/presentation/blocs/main/cart/cart_bloc.d
 import 'package:bloc_clean_architecture/presentation/blocs/main/home/home_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/main_cubit.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/search_product/search_product_bloc.dart';
+import 'package:bloc_clean_architecture/presentation/blocs/settings/settings_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/signin/signin_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/signup/signup_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/splash_screen/splash_screen_cubit.dart';
@@ -48,6 +49,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => SearchProductBloc(sl()),
         ),
+        BlocProvider(
+          create: (context) => SettingsBloc(sl(), sl(), sl()),
+        )
       ],
       child: MaterialApp(
         title: 'BLoC Clean Architecture',

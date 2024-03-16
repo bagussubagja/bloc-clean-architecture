@@ -21,6 +21,7 @@ import 'package:bloc_clean_architecture/presentation/blocs/main/cart/cart_bloc.d
 import 'package:bloc_clean_architecture/presentation/blocs/main/home/home_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/main_cubit.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/search_product/search_product_bloc.dart';
+import 'package:bloc_clean_architecture/presentation/blocs/settings/settings_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/signin/signin_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/signup/signup_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/splash_screen/splash_screen_cubit.dart';
@@ -42,6 +43,7 @@ Future<void> initServiceLocator() async {
   sl.registerFactory(() => CartBloc());
   sl.registerFactory(() => DetailProductBloc(sl()));
   sl.registerFactory(() => SearchProductBloc(sl()));
+  sl.registerFactory(() => SettingsBloc(sl(), sl(), sl()));
 
   // Usecase
   sl.registerLazySingleton(() => SignInUseCase(sl()));
