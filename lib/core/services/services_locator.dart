@@ -13,12 +13,14 @@ import 'package:bloc_clean_architecture/domain/usecases/category/get_category_us
 import 'package:bloc_clean_architecture/domain/usecases/products/get_detail_product_usecase.dart';
 import 'package:bloc_clean_architecture/domain/usecases/products/get_product_usecase.dart';
 import 'package:bloc_clean_architecture/domain/usecases/products/get_products_by_category.dart';
+import 'package:bloc_clean_architecture/domain/usecases/products/get_search_product_by_name.dart';
 import 'package:bloc_clean_architecture/domain/usecases/user/get_profile_usecase.dart';
 import 'package:bloc_clean_architecture/domain/usecases/user/sign_in_usecase.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/detail_product/detail_product_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/cart/cart_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/home/home_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/main_cubit.dart';
+import 'package:bloc_clean_architecture/presentation/blocs/search_product/search_product_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/signin/signin_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/signup/signup_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/splash_screen/splash_screen_cubit.dart';
@@ -39,6 +41,7 @@ Future<void> initServiceLocator() async {
   sl.registerFactory(() => HomeBloc(sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory(() => CartBloc());
   sl.registerFactory(() => DetailProductBloc(sl()));
+  sl.registerFactory(() => SearchProductBloc(sl()));
 
   // Usecase
   sl.registerLazySingleton(() => SignInUseCase(sl()));
@@ -49,6 +52,7 @@ Future<void> initServiceLocator() async {
   sl.registerLazySingleton(() => GetProfileUserUseCase(sl()));
   sl.registerLazySingleton(() => GetDetailProductUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetProductsByCategory(sl()));
+  sl.registerLazySingleton(() => GetSearchProductByNameUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<UserRepository>(

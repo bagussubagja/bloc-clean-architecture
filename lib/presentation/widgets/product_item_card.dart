@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 Widget productItemCard(BuildContext context, Products products, int productId) {
   return GestureDetector(
     onTap: () {
-      Navigator.pushNamed(context, AppRouter.detailProduct, arguments: productId);
+      Navigator.pushNamed(context, AppRouter.detailProduct,
+          arguments: productId);
     },
     child: Container(
       decoration: BoxDecoration(
@@ -61,7 +62,6 @@ Widget productItemCard(BuildContext context, Products products, int productId) {
               );
             },
           ),
-          const Spacer(),
           Padding(
             padding: const EdgeInsets.all(8),
             child: Column(

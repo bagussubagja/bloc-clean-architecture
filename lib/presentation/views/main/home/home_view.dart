@@ -1,3 +1,5 @@
+import 'package:bloc_clean_architecture/core/constant/colors.dart';
+import 'package:bloc_clean_architecture/core/router/app_router.dart';
 import 'package:bloc_clean_architecture/core/theme/app_theme.dart';
 import 'package:bloc_clean_architecture/domain/entities/category/categories.dart';
 import 'package:bloc_clean_architecture/domain/entities/products/products.dart';
@@ -44,6 +46,8 @@ class _HomeViewState extends State<HomeView> {
                 children: [
                   _headerSection(state.user.name!, state.user.avatar!),
                   verticalSpacing(36),
+                  _searchWidget(),
+                  verticalSpacing(36),
                   _categorySection(state.categories),
                   verticalSpacing(36),
                   Visibility(
@@ -85,6 +89,35 @@ class _HomeViewState extends State<HomeView> {
             });
           }
         },
+      ),
+    );
+  }
+
+  Widget _searchWidget() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, AppRouter.searchProduct);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: AppColor.grayColor10,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.search,
+              color: AppColor.grayColor100,
+            ),
+            horizontalSpacing(24),
+            const Text(
+              'Search here...',
+              style: AppTheme.paragraph2,
+            ),
+          ],
+        ),
       ),
     );
   }
