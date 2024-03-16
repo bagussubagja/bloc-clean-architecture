@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 Widget customButton(
     {required Function() onTap,
     Color? color,
+    bool? isSecondary = false,
+    bool? enableBorderRadius = true,
+    Widget? icon,
     required String text,
     required bool isLoading}) {
   return InkWell(
@@ -16,16 +19,42 @@ Widget customButton(
       width: double.infinity,
       decoration: BoxDecoration(
         color: color ?? AppColor.greenLightMossColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: enableBorderRadius == true
+            ? BorderRadius.circular(12)
+            : BorderRadius.circular(0),
+        border: isSecondary == true
+            ? Border.all(
+                color: AppColor.greenLightMossColor,
+                width: 0.1,
+              )
+            : null,
       ),
       child: isLoading
           ? const CupertinoActivityIndicator(
               color: Colors.white,
             )
-          : Text(
-              text,
-              style: AppTheme.paragraph2.copyWith(color: AppColor.whiteColor),
-            ),
+          : icon != null
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    icon,
+                    Text(
+                      text,
+                      style: AppTheme.paragraph2.copyWith(
+                          color: isSecondary == false
+                              ? AppColor.whiteColor
+                              : AppColor.blackColor100),
+                    )
+                  ],
+                )
+              : Text(
+                  text,
+                  style: AppTheme.paragraph2.copyWith(
+                      color: isSecondary == false
+                          ? AppColor.whiteColor
+                          : AppColor.blackColor100),
+                ),
     ),
   );
 }

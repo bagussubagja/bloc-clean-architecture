@@ -1,5 +1,6 @@
 import 'package:bloc_clean_architecture/core/router/app_router.dart';
 import 'package:bloc_clean_architecture/core/services/services_locator.dart';
+import 'package:bloc_clean_architecture/presentation/blocs/detail_product/detail_product_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/cart/cart_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/home/home_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/main_cubit.dart';
@@ -39,6 +40,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => CartBloc(),
+        ),
+        BlocProvider(
+          create: (context) => DetailProductBloc(sl()),
         )
       ],
       child: MaterialApp(
