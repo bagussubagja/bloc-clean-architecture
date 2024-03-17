@@ -7,7 +7,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget productItemCard(BuildContext context, Products products, int productId) {
+Widget productItemCard(BuildContext context, Products products, int productId,
+    Function()? onCartItemTap) {
   return GestureDetector(
     onTap: () {
       Navigator.pushNamed(context, AppRouter.detailProduct,
@@ -79,8 +80,11 @@ Widget productItemCard(BuildContext context, Products products, int productId) {
                       '\$${products.price}',
                       style: AppTheme.paragraph1,
                     ),
-                    const Icon(
-                      Icons.shopping_cart_checkout,
+                    InkWell(
+                      onTap: onCartItemTap,
+                      child: const Icon(
+                        Icons.shopping_cart_checkout,
+                      ),
                     )
                   ],
                 )

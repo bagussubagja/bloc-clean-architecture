@@ -1,6 +1,7 @@
 import 'package:bloc_clean_architecture/core/constant/colors.dart';
 import 'package:bloc_clean_architecture/core/router/app_router.dart';
 import 'package:bloc_clean_architecture/core/theme/app_theme.dart';
+import 'package:bloc_clean_architecture/data/models/product/cart_item_model.dart';
 import 'package:bloc_clean_architecture/domain/entities/category/categories.dart';
 import 'package:bloc_clean_architecture/domain/entities/products/products.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/main/home/home_bloc.dart';
@@ -88,6 +89,11 @@ class _HomeViewState extends State<HomeView> {
               isLoading = true;
             });
           }
+          if (state is HomeAddItemToCart) {
+            const snackBar =
+                SnackBar(content: Text('Item Successfully Added to Cart!'));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
         },
       ),
     );
@@ -136,6 +142,15 @@ class _HomeViewState extends State<HomeView> {
         context,
         products[index],
         products[index].id!,
+        () {
+          var params = CartItemModel(
+            productId: products[index].id.toString(),
+            productName: products[index].title,
+            productImage: products[index].images![0],
+            productPrice: products[index].price.toString(),
+          );
+          context.read<HomeBloc>().add(HomeAddItemToCartEvent(params));
+        },
       ),
     );
   }
@@ -188,7 +203,7 @@ class _HomeViewState extends State<HomeView> {
               style: AppTheme.header1,
             ),
             Text(
-              name,
+              '$name.',
               style: AppTheme.paragraph2,
             )
           ],

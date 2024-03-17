@@ -1,5 +1,6 @@
 import 'package:bloc_clean_architecture/core/constant/colors.dart';
 import 'package:bloc_clean_architecture/core/theme/app_theme.dart';
+import 'package:bloc_clean_architecture/data/models/product/cart_item_model.dart';
 import 'package:bloc_clean_architecture/domain/entities/products/detail_product.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/detail_product/detail_product_bloc.dart';
 import 'package:bloc_clean_architecture/presentation/widgets/custom_button.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DetailProductView extends StatefulWidget {
   const DetailProductView({super.key, required this.productId});
+
   final int productId;
 
   @override
@@ -31,6 +33,8 @@ class _DetailProductViewState extends State<DetailProductView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<DetailProductBloc, DetailProductState>(
+        buildWhen: (previous, current) => current is! DetailProductAfterState,
+        listenWhen: (previous, current) => current is DetailProductAfterState,
         builder: (context, state) {
           if (state is DetailProductSuccessFetchState) {
             return _mainBody(detailProduct: state.detailProduct);
@@ -45,7 +49,13 @@ class _DetailProductViewState extends State<DetailProductView> {
           }
           return const SizedBox();
         },
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is DetailProductAddItemToCartState) {
+            const snackBar =
+                SnackBar(content: Text('Item Successfully added to Cart!'));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+        },
       ),
     );
   }
@@ -179,7 +189,16 @@ class _DetailProductViewState extends State<DetailProductView> {
             children: [
               Expanded(
                 child: customButton(
-                  onTap: () {},
+                  onTap: () {
+                    var params = CartItemModel(
+                        productId: detailProduct.id.toString(),
+                        productName: detailProduct.title,
+                        productImage: detailProduct.images![0],
+                        productPrice: detailProduct.price.toString());
+                    context
+                        .read<DetailProductBloc>()
+                        .add(DetailProductAddToCartEvent(params));
+                  },
                   icon: const Icon(Icons.shopping_cart),
                   enableBorderRadius: false,
                   text: 'Save to Cart',

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_clean_architecture/core/error/failures.dart';
 import 'package:bloc_clean_architecture/data/data_source/local/user_local_data_source.dart';
+import 'package:bloc_clean_architecture/data/models/product/cart_item_model.dart';
 import 'package:bloc_clean_architecture/domain/entities/category/categories.dart';
 import 'package:bloc_clean_architecture/domain/entities/products/products.dart';
 import 'package:bloc_clean_architecture/domain/entities/user/user_profile.dart';
@@ -11,6 +12,8 @@ import 'package:bloc_clean_architecture/domain/usecases/user/get_profile_usecase
 import 'package:equatable/equatable.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../../../data/data_source/local/local_database_data_source.dart';
+
 part 'home_event.dart';
 part 'home_state.dart';
 
@@ -20,37 +23,50 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetProfileUserUseCase getProfileUserUseCase;
   final GetProductsByCategory getProductsByCategory;
   final FlutterSecureStorage secureStorage;
+  final UserLocalDataSource userLocalDataSource;
+  final LocalDatabaseDataSource localDatabaseDataSource;
 
   HomeBloc(
-      this.getProductUseCase,
-      this.getCategoryUseCase,
-      this.getProfileUserUseCase,
-      this.secureStorage,
-      this.getProductsByCategory)
-      : super(HomeInitial()) {
+    this.getProductUseCase,
+    this.getCategoryUseCase,
+    this.getProfileUserUseCase,
+    this.secureStorage,
+    this.getProductsByCategory,
+    this.userLocalDataSource,
+    this.localDatabaseDataSource,
+  ) : super(HomeInitial()) {
     on<HomeFetchDataEvent>(onHomeFetchDataEvent);
     on<HomeFetchProductDataByCategoryEvent>(
         onHomeFetchProductDataByCategoryEvent);
+    on<HomeAddItemToCartEvent>(onHomeAddItemToCartEvent);
   }
 
   void onHomeFetchDataEvent(
       HomeFetchDataEvent event, Emitter<HomeState> emit) async {
     try {
       emit(HomeLoadingFetchData());
-      String? token = await secureStorage.read(key: cachedToken);
-      final resultUserProfile = await getProfileUserUseCase(token!);
+      String? token = await userLocalDataSource.getToken();
+      final resultUserProfile = await getProfileUserUseCase(token);
       final resultProduct = await getProductUseCase(event.props);
       final resultCategory = await getCategoryUseCase(event.props);
       resultUserProfile.fold(
           (failUser) => emit(HomeFailedFetchData(failure: failUser)), (user) {
         return resultProduct.fold(
-            (failProduct) => emit(HomeFailedFetchData(failure: failProduct)),
-            (product) {
+            (failProduct) => emit(
+                  HomeFailedFetchData(failure: failProduct),
+                ), (product) {
           return resultCategory.fold(
-              (failCategory) =>
-                  emit(HomeFailedFetchData(failure: failCategory)),
-              (category) => emit(HomeSuccessFetchData(
-                  products: product, categories: category, user: user)));
+            (failCategory) => emit(
+              HomeFailedFetchData(failure: failCategory),
+            ),
+            (category) => emit(
+              HomeSuccessFetchData(
+                products: product,
+                categories: category,
+                user: user,
+              ),
+            ),
+          );
         });
       });
     } catch (e) {
@@ -73,5 +89,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e) {
       emit(HomeFetchProductByCategoryFailedState(ExceptionFailure()));
     }
+  }
+
+  void onHomeAddItemToCartEvent(
+      HomeAddItemToCartEvent event, Emitter<HomeState> emit) async {
+    await localDatabaseDataSource.createCartItem(event.products);
+    emit(HomeAddItemToCart());
   }
 }

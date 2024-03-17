@@ -2,10 +2,12 @@ part of 'detail_product_bloc.dart';
 
 abstract class DetailProductState extends Equatable {
   const DetailProductState();
-  
+
   @override
   List<Object> get props => [];
 }
+
+abstract class DetailProductAfterState extends DetailProductState {}
 
 class DetailProductInitial extends DetailProductState {}
 
@@ -22,3 +24,5 @@ class DetailProductFailedFetchState extends DetailProductState {
 
   const DetailProductFailedFetchState({required this.failure});
 }
+
+class DetailProductAddItemToCartState extends DetailProductAfterState {}

@@ -1,4 +1,6 @@
 import 'package:bloc_clean_architecture/core/network/network_info.dart';
+import 'package:bloc_clean_architecture/core/services/database_services.dart';
+import 'package:bloc_clean_architecture/data/data_source/local/local_database_data_source.dart';
 import 'package:bloc_clean_architecture/data/data_source/local/user_local_data_source.dart';
 import 'package:bloc_clean_architecture/data/data_source/remote/category_remote_data_source.dart';
 import 'package:bloc_clean_architecture/data/data_source/remote/product_remote_data_source.dart';
@@ -39,9 +41,9 @@ Future<void> initServiceLocator() async {
   sl.registerFactory(() => SigninBloc(sl()));
   sl.registerFactory(() => SignupBloc());
   sl.registerFactory(() => MainCubit());
-  sl.registerFactory(() => HomeBloc(sl(), sl(), sl(), sl(), sl()));
-  sl.registerFactory(() => CartBloc());
-  sl.registerFactory(() => DetailProductBloc(sl()));
+  sl.registerFactory(() => HomeBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()));
+  sl.registerFactory(() => CartBloc(sl()));
+  sl.registerFactory(() => DetailProductBloc(sl(), sl()));
   sl.registerFactory(() => SearchProductBloc(sl()));
   sl.registerFactory(() => SettingsBloc(sl(), sl(), sl()));
 
@@ -70,6 +72,8 @@ Future<void> initServiceLocator() async {
   sl.registerLazySingleton<UserLocalDataSource>(
     () => UserLocalDataSourceImpl(sharedPreferences: sl(), secureStorage: sl()),
   );
+  sl.registerLazySingleton<LocalDatabaseDataSource>(
+      () => LocalDatabaseDataSourceImpl(sl()));
   sl.registerLazySingleton<UserRemoteDataSource>(
     () => UserRemoteDataSourceImpl(
       client: sl(),
@@ -90,4 +94,5 @@ Future<void> initServiceLocator() async {
   sl.registerLazySingleton(() => secureStorage);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => InternetConnectionChecker());
+  sl.registerLazySingleton<DatabaseService>(() => DatabaseService.instance);
 }

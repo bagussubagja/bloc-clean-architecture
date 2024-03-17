@@ -12,3 +12,9 @@ class DetailProductFetchDataEvent extends DetailProductEvent {
 
   const DetailProductFetchDataEvent({required this.id});
 }
+
+class DetailProductAddToCartEvent extends DetailProductEvent {
+  final CartItemModel cartItemModel;
+
+  const DetailProductAddToCartEvent(this.cartItemModel);
+}

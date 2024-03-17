@@ -37,7 +37,6 @@ class HomeFetchProductByCategorySuccessState extends HomeAfterState {
   final List<Products>? products;
 
   HomeFetchProductByCategorySuccessState(this.products);
-
 }
 
 class HomeFetchProductByCategoryFailedState extends HomeAfterState {
@@ -45,3 +44,5 @@ class HomeFetchProductByCategoryFailedState extends HomeAfterState {
 
   HomeFetchProductByCategoryFailedState(this.failure);
 }
+
+class HomeAddItemToCart extends HomeAfterState {}
