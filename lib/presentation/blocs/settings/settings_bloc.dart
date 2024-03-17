@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_clean_architecture/core/error/failures.dart';
+import 'package:bloc_clean_architecture/data/models/product/cart_item_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../../data/data_source/local/local_database_data_source.dart';
 import '../../../data/data_source/local/user_local_data_source.dart';
 import '../../../domain/entities/user/user_profile.dart';
 import '../../../domain/usecases/user/get_profile_usecase.dart';
@@ -14,12 +16,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final GetProfileUserUseCase userUseCase;
   final FlutterSecureStorage secureStorage;
   final UserLocalDataSource userLocalDataSource;
+  final LocalDatabaseDataSource localDatabaseDataSource;
 
-  SettingsBloc(this.userUseCase, this.secureStorage, this.userLocalDataSource)
+  SettingsBloc(this.userUseCase, this.secureStorage, this.userLocalDataSource,
+      this.localDatabaseDataSource)
       : super(SettingsInitial()) {
-    on<SettingsEvent>((event, emit) {
-      // TODO: implement event handler
-    });
     on<SettingInitialEvent>(onSettingInitialEvent);
     on<SettingLogoutEvent>(onSettingLogoutEvent);
   }
@@ -39,6 +40,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   void onSettingLogoutEvent(
       SettingLogoutEvent event, Emitter<SettingsState> emit) async {
     await userLocalDataSource.clearCache();
+    await localDatabaseDataSource.deleteDatabase(tableCart);
     emit(SettingToLogout());
   }
 }

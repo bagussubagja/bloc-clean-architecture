@@ -9,6 +9,8 @@ abstract class LocalDatabaseDataSource {
   Future<int> deleteCartItem(int? id);
 
   Future closeDb();
+
+  Future<void> deleteDatabase(String path);
 }
 
 class LocalDatabaseDataSourceImpl implements LocalDatabaseDataSource {
@@ -34,5 +36,10 @@ class LocalDatabaseDataSourceImpl implements LocalDatabaseDataSource {
   @override
   Future closeDb() async {
     return await databaseService.closeDatabase();
+  }
+
+  @override
+  Future<void> deleteDatabase(String path) async {
+    return await databaseService.deleteDatabase(path);
   }
 }

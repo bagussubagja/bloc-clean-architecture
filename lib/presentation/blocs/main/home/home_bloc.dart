@@ -93,7 +93,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void onHomeAddItemToCartEvent(
       HomeAddItemToCartEvent event, Emitter<HomeState> emit) async {
-    await localDatabaseDataSource.createCartItem(event.products);
-    emit(HomeAddItemToCart());
+    try {
+      await localDatabaseDataSource.createCartItem(event.products);
+      emit(HomeAddItemToCartSuccess());
+    } catch (e) {
+      emit(HomeAddItemToCartFailed(e.toString()));
+    }
   }
 }

@@ -25,4 +25,10 @@ class DetailProductFailedFetchState extends DetailProductState {
   const DetailProductFailedFetchState({required this.failure});
 }
 
-class DetailProductAddItemToCartState extends DetailProductAfterState {}
+class DetailProductAddItemToCartSuccessState extends DetailProductAfterState {}
+
+class DetailProductAddItemToCartFailedState extends DetailProductAfterState {
+  final String message;
+
+  DetailProductAddItemToCartFailedState(this.message);
+}

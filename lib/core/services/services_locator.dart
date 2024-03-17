@@ -45,7 +45,7 @@ Future<void> initServiceLocator() async {
   sl.registerFactory(() => CartBloc(sl()));
   sl.registerFactory(() => DetailProductBloc(sl(), sl()));
   sl.registerFactory(() => SearchProductBloc(sl()));
-  sl.registerFactory(() => SettingsBloc(sl(), sl(), sl()));
+  sl.registerFactory(() => SettingsBloc(sl(), sl(), sl(), sl()));
 
   // Usecase
   sl.registerLazySingleton(() => SignInUseCase(sl()));

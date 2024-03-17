@@ -28,7 +28,7 @@ class DatabaseService {
     await db.execute('''
       CREATE TABLE $tableCart (
       ${CartItem.id} $idType,
-      ${CartItem.productId} $textType,
+      ${CartItem.productId} $textType UNIQUE,
       ${CartItem.productName} $textType,
       ${CartItem.productPrice} $textType,
       ${CartItem.productImage} $textType
@@ -38,8 +38,24 @@ class DatabaseService {
 
   Future<CartItemModel> createCartItem(CartItemModel params) async {
     final db = await instance.database;
-    final item = await db.insert(tableCart, params.toJson());
-    return params.copy(id: item);
+
+    final existingCartItem = await db.query(
+      tableCart,
+      where: '${CartItem.productId} = ?',
+      whereArgs: [params.productId],
+    );
+
+    if (existingCartItem.isEmpty) {
+      final item = await db.insert(
+        tableCart,
+        params.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.fail,
+      );
+      return params.copy(id: item);
+    } else {
+      throw Exception(
+          'A cart item with productId ${params.productName} already exists.');
+    }
   }
 
   Future<List<CartItemModel>> getAllCartItem() async {
@@ -57,5 +73,10 @@ class DatabaseService {
   Future closeDatabase() async {
     final db = await instance.database;
     db.close();
+  }
+
+  Future<void> deleteDatabase(String path) async {
+    final database = await instance.database;
+    database.delete(tableCart);
   }
 }

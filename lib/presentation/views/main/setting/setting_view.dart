@@ -1,5 +1,6 @@
 import 'package:bloc_clean_architecture/core/router/app_router.dart';
 import 'package:bloc_clean_architecture/presentation/blocs/settings/settings_bloc.dart';
+import 'package:bloc_clean_architecture/presentation/widgets/loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +41,9 @@ class _SettingViewState extends State<SettingView> {
                 ),
               ],
             );
+          }
+          if (state is SettingLoadingState) {
+            return loadingWidget();
           }
           return Container();
         },

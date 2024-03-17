@@ -40,30 +40,35 @@ class _HomeViewState extends State<HomeView> {
         listenWhen: (previous, current) => current is HomeAfterState,
         builder: (context, state) {
           if (state is HomeSuccessFetchData) {
-            return SafeArea(
-              child: ListView(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(12),
-                children: [
-                  _headerSection(state.user.name!, state.user.avatar!),
-                  verticalSpacing(36),
-                  _searchWidget(),
-                  verticalSpacing(36),
-                  _categorySection(state.categories),
-                  verticalSpacing(36),
-                  Visibility(
-                    replacement: const Center(
-                      child: CupertinoActivityIndicator(),
-                    ),
-                    visible: !isLoading,
-                    child: _productListSection(
-                      products: products.isEmpty ? state.products! : products,
-                    ),
+            return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<HomeBloc>().add(HomeFetchDataEvent());
+                },
+                child: SafeArea(
+                  child: ListView(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(12),
+                    children: [
+                      _headerSection(state.user.name!, state.user.avatar!),
+                      verticalSpacing(36),
+                      _searchWidget(),
+                      verticalSpacing(36),
+                      _categorySection(state.categories),
+                      verticalSpacing(36),
+                      Visibility(
+                        replacement: const Center(
+                          child: CupertinoActivityIndicator(),
+                        ),
+                        visible: !isLoading,
+                        child: _productListSection(
+                          products:
+                              products.isEmpty ? state.products! : products,
+                        ),
+                      ),
+                      verticalSpacing(75),
+                    ],
                   ),
-                  verticalSpacing(75),
-                ],
-              ),
-            );
+                ));
           }
           if (state is HomeFailedFetchData) {
             return Center(
@@ -89,9 +94,13 @@ class _HomeViewState extends State<HomeView> {
               isLoading = true;
             });
           }
-          if (state is HomeAddItemToCart) {
+          if (state is HomeAddItemToCartSuccess) {
             const snackBar =
                 SnackBar(content: Text('Item Successfully Added to Cart!'));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+          if (state is HomeAddItemToCartFailed) {
+            final snackBar = SnackBar(content: Text(state.message));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
         },

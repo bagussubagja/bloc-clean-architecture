@@ -34,7 +34,11 @@ class DetailProductBloc extends Bloc<DetailProductEvent, DetailProductState> {
 
   void onDetailProductAddToCartEvent(DetailProductAddToCartEvent event,
       Emitter<DetailProductState> emit) async {
-    await localDatabaseDataSource.createCartItem(event.cartItemModel);
-    emit(DetailProductAddItemToCartState());
+    try {
+      await localDatabaseDataSource.createCartItem(event.cartItemModel);
+      emit(DetailProductAddItemToCartSuccessState());
+    } catch (e) {
+      emit(DetailProductAddItemToCartFailedState(e.toString()));
+    }
   }
 }

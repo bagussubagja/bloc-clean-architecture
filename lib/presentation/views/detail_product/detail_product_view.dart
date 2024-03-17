@@ -50,9 +50,13 @@ class _DetailProductViewState extends State<DetailProductView> {
           return const SizedBox();
         },
         listener: (context, state) {
-          if (state is DetailProductAddItemToCartState) {
+          if (state is DetailProductAddItemToCartSuccessState) {
             const snackBar =
                 SnackBar(content: Text('Item Successfully added to Cart!'));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+          if (state is DetailProductAddItemToCartFailedState) {
+            final snackBar = SnackBar(content: Text(state.message));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
         },

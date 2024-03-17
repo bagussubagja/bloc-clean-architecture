@@ -38,13 +38,17 @@ Widget productItemCard(BuildContext context, Products products, int productId,
             placeholder: (context, url) => const Center(
               child: CupertinoActivityIndicator(),
             ),
-            errorWidget: (context, url, error) => const Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error),
-                Text('Image Not Found'),
-              ],
+            errorWidget: (context, url, error) => Align(
+              alignment: Alignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  verticalSpacing(50),
+                  const Icon(Icons.error),
+                  const Text('Image Not Available'),
+                ],
+              ),
             ),
             imageBuilder: (context, imageProvider) {
               return Container(
@@ -63,6 +67,7 @@ Widget productItemCard(BuildContext context, Products products, int productId,
               );
             },
           ),
+          const Spacer(),
           Padding(
             padding: const EdgeInsets.all(8),
             child: Column(

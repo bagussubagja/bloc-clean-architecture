@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           create: (context) => SearchProductBloc(sl()),
         ),
         BlocProvider(
-          create: (context) => SettingsBloc(sl(), sl(), sl()),
+          create: (context) => SettingsBloc(sl(), sl(), sl(), sl()),
         )
       ],
       child: MaterialApp(

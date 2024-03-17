@@ -45,4 +45,10 @@ class HomeFetchProductByCategoryFailedState extends HomeAfterState {
   HomeFetchProductByCategoryFailedState(this.failure);
 }
 
-class HomeAddItemToCart extends HomeAfterState {}
+class HomeAddItemToCartSuccess extends HomeAfterState {}
+
+class HomeAddItemToCartFailed extends HomeAfterState {
+  final String message;
+
+  HomeAddItemToCartFailed(this.message);
+}
