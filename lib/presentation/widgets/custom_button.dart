@@ -4,11 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Widget customButton(
-    {required Function() onTap,
+    {required Function()? onTap,
     Color? color,
     bool? isSecondary = false,
     bool? enableBorderRadius = true,
     Widget? icon,
+    bool isDisable = false,
     required String text,
     required bool isLoading}) {
   return InkWell(
@@ -18,7 +19,8 @@ Widget customButton(
       padding: const EdgeInsets.all(12),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: color ?? AppColor.greenLightMossColor,
+        color:
+            !isDisable ? AppColor.greenLightMossColor : AppColor.grayColor100,
         borderRadius: enableBorderRadius == true
             ? BorderRadius.circular(12)
             : BorderRadius.circular(0),

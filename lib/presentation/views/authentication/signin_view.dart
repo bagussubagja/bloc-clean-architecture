@@ -18,9 +18,10 @@ class SigninView extends StatefulWidget {
 }
 
 class _SigninViewState extends State<SigninView> {
-  final emailController = TextEditingController(text: 'bagus@email.com');
-  final passwordController = TextEditingController(text: '1234');
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   bool isLoading = false;
+
   @override
   void initState() {
     super.initState();

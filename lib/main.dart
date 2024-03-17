@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           create: (context) => SigninBloc(sl()),
         ),
         BlocProvider(
-          create: (context) => SignupBloc(),
+          create: (context) => SignupBloc(sl()),
         ),
         BlocProvider(
           create: (context) => MainCubit(),

@@ -16,6 +16,12 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   @override
+  void dispose() {
+    context.read<MainCubit>().update(0);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
