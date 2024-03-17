@@ -2,29 +2,4 @@ A Clean Architecture Project with BLoC State Management
 
 Structure Project :
 
-.
-├── core/
-│ ├── constant
-│ ├── error
-│ ├── extension
-│ ├── network
-│ ├── router
-│ ├── services
-│ ├── theme
-│ ├── usecases
-│ └── util
-├── data/
-│ ├── data_source/
-│ │ ├── local
-│ │ └── remote
-│ ├── models
-│ └── repositories
-├── domain/
-│ ├── entities
-│ ├── repositories
-│ └── usecases
-├── presentation/
-│ ├── blocs
-│ ├── views
-│ └── widgets
-└── main.dart
+![carbon](https://github.com/bagussubagja/bloc-clean-architecture/assets/74639319/3c4901d6-c792-47b1-8753-6b46213068dd)
